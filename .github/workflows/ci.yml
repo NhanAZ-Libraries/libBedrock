@@ -1,9 +1,12 @@
-name: CI
+name: Analyze libBedrock source and style
 
 on:
   push:
   pull_request:
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   phpstan:
@@ -12,54 +15,80 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image: [ubuntu-latest]
+        image: [ubuntu-24.04]
         php: ["8.2"]
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup PHP 🐘
-        uses: pmmp/setup-php-action@3.2.0
+      - name: Check out libBedrock source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          php-version: ${{ matrix.php }}
-          install-path: "./bin"
-          pm-version-major: "5"
+          persist-credentials: false
 
-      - name: Get Composer cache directory 📁
+      - name: Check out Axolotl-PM PHP setup helper
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: axolotl-pm/setup-php-action
+          ref: b8c3f9add4f2ad4a5e2624a1112aba899ee8db0e
+          path: .devtools-dependencies/setup-php-action
+          persist-credentials: false
+
+      - name: Set up PHP environment
+        shell: bash
+        env:
+          INPUT_PHP-VERSION: ${{ matrix.php }}
+          INPUT_PM-VERSION-MAJOR: "5"
+          INPUT_INSTALL-PATH: ./.php-bin
+        run: node "$GITHUB_WORKSPACE/.devtools-dependencies/setup-php-action/dist/index.js"
+
+      - name: Resolve Composer cache directory
         id: composer-cache
         run: |
           echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: Cache dependencies 📦
-        uses: actions/cache@v4
+      - name: Cache Composer downloads
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
 
-      - name: Install dependencies ⬇️
+      - name: Install locked Composer dependencies
         run: composer install --prefer-dist
 
-      - name: Run PHPStan 🔍
+      - name: Run PHPStan at maximum level
         run: composer run-script analyse
 
   codestyle:
-    name: Code Style checks
-    runs-on: ubuntu-latest
+    name: Check PHP source style
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup PHP 🐘
-        uses: shivammathur/setup-php@2.32.0
+      - name: Check out libBedrock source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          php-version: 8.1
-          tools: php-cs-fixer
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
 
-      - name: Run PHP-CS-Fixer 🔍
-        run: php-cs-fixer fix --dry-run --ansi --diff
+      - name: Check out Axolotl-PM PHP setup helper
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: axolotl-pm/setup-php-action
+          ref: b8c3f9add4f2ad4a5e2624a1112aba899ee8db0e
+          path: .devtools-dependencies/setup-php-action
+          persist-credentials: false
+
+      - name: Set up PHP environment
+        shell: bash
+        env:
+          INPUT_PHP-VERSION: "8.2"
+          INPUT_PM-VERSION-MAJOR: "5"
+          INPUT_INSTALL-PATH: ./.php-bin
+        run: node "$GITHUB_WORKSPACE/.devtools-dependencies/setup-php-action/dist/index.js"
+
+      - name: Install locked Composer dependencies
+        run: composer install --prefer-dist
+
+      - name: Check PHP style with locked PHP-CS-Fixer
+        run: ./vendor/bin/php-cs-fixer fix --dry-run --ansi --diff
