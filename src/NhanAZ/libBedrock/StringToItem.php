@@ -27,9 +27,6 @@ class StringToItem {
 		} catch (LegacyStringToItemParserException $e) {
 			throw new libBedrockException($e->getMessage());
 		}
-		if (!$item instanceof Item) {
-			throw new libBedrockException("\"{$string}\" is not a item!");
-		}
 		return $item;
 	}
 }

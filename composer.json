@@ -1,26 +1,32 @@
 {
     "name": "nhanaz/libbedrock",
     "type": "library",
-    "description": "Common features for PocketMine-MP plugins",
+    "description": "Common features for Axolotl-PM plugins",
     "license": "MIT",
     "require": {
-        "pocketmine/pocketmine-mp": "^5.0.0",
-        "thebigcrafter/hydrogen": "^1.0.0",
-        "vennv/vapm-pmmp": "dev-main"
+        "php": "^8.2",
+        "axolotl-pm/pocketmine-mp": "^5.47.0",
+        "thebigcrafter/hydrogen": "^1.1.2",
+        "vennv/vapm-pmmp": "~1.8.7"
     },
     "require-dev": {
-        "phpstan/phpstan": "^1.10.18",
-        "friendsofphp/php-cs-fixer": "^3.17.0"
+        "phpstan/phpstan": "^2.1",
+        "friendsofphp/php-cs-fixer": "^3.64"
     },
     "autoload": {
-        "classmap": [
-            "src"
-        ]
+        "psr-4": {
+            "NhanAZ\\libBedrock\\": "src/NhanAZ/libBedrock/"
+        }
     },
     "extra": {
         "virion": {
             "spec": "3.0",
             "namespace-root": "NhanAZ\\libBedrock"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "8.2.0"
         }
     },
     "scripts": {
