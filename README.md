@@ -1,87 +1,41 @@
-<p align="center">
-	<a href="https://github.com/NhanAZ/libBedrock">
-			<img height="76" src="https://github.com/NhanAZ/libBedrock/blob/master/assets/libBedrock_Icon_GIF.gif" loading="eager" />
-	</a><br>
-	<b>🌈 A library that provides common features for the PocketMine-MP plugin.</b>
-</p>
+# libBedrock
 
-<p align="center">
-	<a href="https://github.com/NhanAZ/libBedrock/actions/workflows/ci.yml"><img src="https://github.com/NhanAZ/libBedrock/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
-	<a href="https://github.com/NhanAZ/libBedrock/releases/latest"><img alt="GitHub release (latest SemVer)" src="https://img.shields.io/github/v/release/NhanAZ/libBedrock?label=release&sort=semver"></a>
-	<a href="https://discord.gg/j2X83ujT6c"><img src="https://img.shields.io/discord/986553214889517088?label=discord&color=7289DA&logo=discord" alt="Discord" /></a>
-</p>
+![libBedrock icon](assets/libBedrock_Icon_GIF.gif)
 
-<details>
+libBedrock is a utility library and virion for Axolotl-PM plugin development. Its source contains item and block parsers, vector and sound helpers, resource pack management, and a file counter.
 
-<summary>Table of Contents</summary>
+[CI results](https://github.com/NhanAZ-Libraries/libBedrock/actions/workflows/ci.yml) | [Published releases](https://github.com/NhanAZ-Libraries/libBedrock/releases) | [Source repository](https://github.com/NhanAZ-Libraries/libBedrock)
 
-- [Including in other plugins](#including-in-other-plugins)
-- [API documentation](#api-documentation)
-- [How to contact me?](#how-to-contact-me)
-- [How do I contribute to libBedrock?](#how-do-i-contribute-to-libbedrock)
-- [Donate](#donate)
-- [Licensing information](https://github.com/NhanAZ/libBedrock/edit/master/README.md#licensing-information)
-- [Credits](#credits)
+## Compatibility and status
 
-</details>
+The [`virion.yml`](virion.yml) manifest declares plugin API `5.0.0`. That declaration does not establish compatibility with every Axolotl-PM 5.x release. The [v1.1.9 release](https://github.com/NhanAZ-Libraries/libBedrock/releases/tag/v1.1.9) is historical. A current combined PHAR and its runtime behavior have not been verified for this library.
 
----
+`Counter` depends on VAPM, while other helpers use Axolotl-PM and Hydrogen APIs. Check the dependency and license terms of every component before distributing a bundle. Static analysis of source code does not verify that those dependencies can be packaged or loaded together.
 
-## Including in other plugins
-Integrate the virion itself into your plugin or you could also use it as a composer library by running the command below:
+## Using the library
 
-`composer require nhanaz/libbedrock`
+Existing integrations should pin a source revision or release and test it with the exact Axolotl-PM runtime and dependency graph they deploy. The repository does not currently provide a verified build of the latest source for general installation.
 
-This library supports being included as a [virion](https://github.com/poggit/support/blob/master/virion.md).
+For example, `BedrockMath::center()` returns a new vector offset by half a block on each axis:
 
-If you use [Poggit](https://poggit.pmmp.io) to build your plugin, you can add it to your `.poggit.yml` like so:
+```php
+use NhanAZ\libBedrock\BedrockMath;
+use pocketmine\math\Vector3;
 
-```yml
---- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/YourGithubUserName/YourPluginName
-build-by-default: true
-branches:
-- master
-projects:
-  YourPluginName:
-    path: ""
-    libs:
-      - src: NhanAZ/libBedrock/libBedrock
-        version: x.y.z
-...
-
+$center = BedrockMath::center(new Vector3(0, 64, 0));
+// (0.5, 64.5, 0.5)
 ```
 
-## API documentation
-There's no documentation yet, but you can check out the [demo plugin](https://github.com/search?q=org%3Anhanaz-pm-pl%20libBedrock&type=code)/[dependency graph](https://github.com/NhanAZ/libBedrock/network/dependents) which shows how to use its API in a plugin or read the PHPDocs written in the code.
+See the [source classes](src/NhanAZ/libBedrock) for the public methods and their parameters. This example does not establish that every helper is supported by every Axolotl-PM 5.x version.
 
-## How to contact me?
-You can contact me directly via Discord `NhanAZ` (Originally known as `NhanAZ#9115`), ping `@NhanAZ` in Discord https://discord.gg/j2X83ujT6c, email to `nhanaz@duck.com`.
+## Building and verification
 
-## How do I contribute to libBedrock?
-Before you participate in our community, please read the [Code of Conduct](https://github.com/NhanAZ/libBedrock/blob/master/CODE_OF_CONDUCT.md).
+[DevTools](https://github.com/NhanAZ/DevTools) can build and validate plugin PHARs when their dependencies meet its packaging contract. A DevTools build of libBedrock with its current dependency graph has not passed that contract. Do not treat a passing source CI run or an older release as proof of a verified current PHAR.
 
-See [Contributing](https://github.com/NhanAZ/libBedrock/blob/master/CONTRIBUTING.md) for more details.
+The [CI workflow](.github/workflows/ci.yml) runs source checks. Review the linked workflow run for its exact source revision and tests before reusing a result. Package and runtime checks remain necessary for a consumer plugin.
 
-## Donate
-- [PayPal](https://www.paypal.com/paypalme/NhanAZ)
+## License and credits
 
-## Licensing information
-This project is licensed under MIT. Please see the [LICENSE](/LICENSE) file for details.
+The libBedrock source is distributed under the existing [MIT license](LICENSE). Dependencies and bundled assets retain their own terms. The source includes a wrapper for [Hydrogen](https://github.com/thebigcrafter/Hydrogen) and uses [VAPM](https://github.com/VennDev/LibVapmPMMP) in `Counter`. No change to those projects' licenses is implied here.
 
-## Credits
-<details>
-
-<summary>Details</summary>
-
-- [Contributors](https://github.com/NhanAZ/libBedrock/graphs/contributors)
-- [pmmp/PocketMine-MP](https://github.com/pmmp/PocketMine-MP)
-- [thebigcrafter/ktpmpl-cfs](https://github.com/thebigcrafter/ktpmpl-cfs)
-- [jasonw4331/libCustomPack](https://github.com/jasonw4331/libCustomPack)
-- [thebigcrafter/oh-my-pmmp](https://github.com/thebigcrafter/oh-my-pmmp)
-- [thebigcrafter/Hydrogen](https://github.com/thebigcrafter/Hydrogen)
-- [PHPStan](https://github.com/phpstan/phpstan)
-- [PHP Coding Standards Fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer)
-- [Visual Studio Code](https://code.visualstudio.com/)
-- [PhpStorm](https://www.jetbrains.com/phpstorm/)
-
-</details>
+Contributions should follow the [contributing guide](CONTRIBUTING.md) and [code of conduct](CODE_OF_CONDUCT.md). For support, use [NhanAZ Discord](https://discord.gg/j2X83ujT6c).
