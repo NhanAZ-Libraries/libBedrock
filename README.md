@@ -32,7 +32,7 @@ See the [source classes](src/NhanAZ/libBedrock) for the public methods and their
 
 ## Building and verification
 
-[DevTools](https://github.com/NhanAZ/DevTools) can build and validate plugin PHARs when their dependencies meet its packaging contract. A DevTools build of libBedrock with its current dependency graph has not passed that contract. Do not treat a passing source CI run or an older release as proof of a verified current PHAR.
+[DevTools](https://github.com/NhanAZ/DevTools) can build and validate plugin PHARs when their dependencies meet its packaging contract. The [`devtools.yml`](devtools.yml) file selects the locked Composer graph instead of importing the older `.poggit.yml` library declarations into the same build. A DevTools build of libBedrock with its current dependency graph has not passed the shading contract. Do not treat a passing source CI run or an older release as proof of a verified current PHAR.
 
 The [CI workflow](.github/workflows/ci.yml) runs source checks. Review the linked workflow run for its exact source revision and tests before reusing a result. Package and runtime checks remain necessary for a consumer plugin.
 
