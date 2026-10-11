@@ -40,7 +40,7 @@ class ResourcePackManager {
 		}
 
 		$zip->close();
-		Filesystem::recursiveUnlink(Path::join($plugin->getDataFolder() . $plugin->getName() . ' Pack'));
+		Filesystem::recursiveUnlink(Path::join($plugin->getDataFolder(), $plugin->getName() . ' Pack'));
 		$plugin->getLogger()->debug('Resource pack compiled');
 
 		$plugin->getLogger()->debug('Registering resource pack');
