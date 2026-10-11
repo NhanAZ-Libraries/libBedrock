@@ -6,7 +6,7 @@
     "require": {
         "php": "^8.2",
         "axolotl-pm/pocketmine-mp": "^5.47.0",
-        "thebigcrafter/hydrogen": "^1.1.2",
+        "thebigcrafter/hydrogen": "^1.1.3",
         "vennv/vapm-pmmp": "~1.8.7"
     },
     "require-dev": {

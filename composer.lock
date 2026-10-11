@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "11dbe71d9314e46e0ea0cc95ce8189cf",
+    "content-hash": "1d44e868bf29d2d466f225f60f423a10",
     "packages": [
         {
             "name": "adhocore/json-comment",
@@ -1149,26 +1149,26 @@
         },
         {
             "name": "thebigcrafter/hydrogen",
-            "version": "1.1.2",
+            "version": "1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thebigcrafter/Hydrogen.git",
-                "reference": "5e7b870bfc1fe2a7de8ccc2cf7e0a17f7f5a373c"
+                "reference": "13e1c9f216b0ccaac4487e9ecb33de768ef69d35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thebigcrafter/Hydrogen/zipball/5e7b870bfc1fe2a7de8ccc2cf7e0a17f7f5a373c",
-                "reference": "5e7b870bfc1fe2a7de8ccc2cf7e0a17f7f5a373c",
+                "url": "https://api.github.com/repos/thebigcrafter/Hydrogen/zipball/13e1c9f216b0ccaac4487e9ecb33de768ef69d35",
+                "reference": "13e1c9f216b0ccaac4487e9ecb33de768ef69d35",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.1",
-                "pocketmine/pocketmine-mp": "^5.0",
                 "sof3/await-generator": "^3.6"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.17",
-                "phpstan/phpstan": "^1.10"
+                "phpstan/phpstan": "^2.1",
+                "pocketmine/pocketmine-mp": "^5.0"
             },
             "type": "library",
             "extra": {
@@ -1194,10 +1194,10 @@
             "description": "A library that provides common functionality for the plugins of thebigcrafter",
             "support": {
                 "issues": "https://github.com/thebigcrafter/Hydrogen/issues",
-                "source": "https://github.com/thebigcrafter/Hydrogen/tree/1.1.2"
+                "source": "https://github.com/thebigcrafter/Hydrogen/tree/1.1.3"
             },
             "abandoned": true,
-            "time": "2023-09-27T15:03:20+00:00"
+            "time": "2026-10-11T02:45:38+00:00"
         },
         {
             "name": "vennv/vapm-pmmp",
