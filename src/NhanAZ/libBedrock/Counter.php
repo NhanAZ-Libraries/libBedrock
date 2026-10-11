@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace NhanAZ\libBedrock;
 
 use pocketmine\plugin\PluginBase;
-use Symfony\Component\Finder\SplFileInfo;
+use SplFileInfo;
 use vennv\vapm\Async;
 use vennv\vapm\Error;
 use vennv\vapm\FiberManager;
@@ -39,11 +39,15 @@ class Counter {
 				);
 				$txtFiles = [];
 				foreach ($files as $file) {
-					/** @var SplFileInfo $file */
-					if ($file->isFile() && $file->getExtension() == $extension) {
-						$txtFiles[] = $file->getRealPath();
-						FiberManager::wait();
+					if (!($file instanceof SplFileInfo) || !$file->isFile() || $file->getExtension() != $extension) {
+						continue;
 					}
+					$path = $file->getRealPath();
+					if ($path === false) {
+						continue;
+					}
+					$txtFiles[] = $path;
+					FiberManager::wait();
 				}
 				$totalLines = 0;
 				$totalWords = 0;
