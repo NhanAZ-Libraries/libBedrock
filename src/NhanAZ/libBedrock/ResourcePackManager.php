@@ -11,10 +11,9 @@ use pocketmine\resourcepacks\ZippedResourcePack;
 use pocketmine\utils\Filesystem;
 use Symfony\Component\Filesystem\Path;
 use function array_search;
-use function is_array;
+use function array_splice;
 use function is_null;
 use function is_string;
-use function mb_strtolower;
 use function preg_replace;
 use function str_contains;
 use function unlink;
@@ -50,26 +49,10 @@ class ResourcePackManager {
 		$packId = $pack->getPackId();
 		$manager = $plugin->getServer()->getResourcePackManager();
 
-		$reflection = new \ReflectionClass($manager);
-
-		$property = $reflection->getProperty("resourcePacks");
-		$currentResourcePacks = $property->getValue($manager);
-		if (!is_array($currentResourcePacks)) {
-			throw new libBedrockUnexpectedValueException();
-		}
+		$currentResourcePacks = $manager->getResourceStack();
 		$currentResourcePacks[] = $pack;
-		$property->setValue($manager, $currentResourcePacks);
-
-		$property = $reflection->getProperty("uuidList");
-		$currentUUIDPacks = $property->getValue($manager);
-		if (!is_array($currentUUIDPacks)) {
-			throw new libBedrockUnexpectedValueException();
-		}
-		$currentUUIDPacks[mb_strtolower($pack->getPackId())] = $pack;
-		$property->setValue($manager, $currentUUIDPacks);
-
-		$property = $reflection->getProperty("serverForceResources");
-		$property->setValue($manager, true);
+		$manager->setResourceStack($currentResourcePacks);
+		$manager->setResourcePacksRequired(true);
 
 		if ($encryptKey !== "") {
 			$manager->setPackEncryptionKey($packId, $encryptKey);
@@ -81,34 +64,17 @@ class ResourcePackManager {
 	public static function unRegisterResourcePack(PluginBase $plugin) : void {
 		$manager = $plugin->getServer()->getResourcePackManager();
 		$pack = self::$pack;
-
-		$reflection = new \ReflectionClass($manager);
-
-		$property = $reflection->getProperty("resourcePacks");
-		$currentResourcePacks = $property->getValue($manager);
-		if (!is_array($currentResourcePacks)) {
-			throw new libBedrockUnexpectedValueException();
-		}
-		$key = array_search($pack, $currentResourcePacks, true);
-
-		if ($key !== false) {
-			unset($currentResourcePacks[$key]);
-			$property->setValue($manager, $currentResourcePacks);
-		}
-
-		$property = $reflection->getProperty("uuidList");
-		$currentUUIDPacks = $property->getValue($manager);
-
 		if (is_null($pack)) {
 			throw new libBedrockUnexpectedValueException();
 		}
-		if (isset($currentResourcePacks[mb_strtolower($pack->getPackId())])) {
-			if (!is_array($currentUUIDPacks)) {
-				throw new libBedrockUnexpectedValueException();
-			}
-			unset($currentUUIDPacks[mb_strtolower($pack->getPackId())]);
-			$property->setValue($manager, $currentUUIDPacks);
+		$currentResourcePacks = $manager->getResourceStack();
+		$key = array_search($pack, $currentResourcePacks, true);
+
+		if ($key !== false) {
+			array_splice($currentResourcePacks, $key, 1);
+			$manager->setResourceStack($currentResourcePacks);
 		}
+		$manager->setPackEncryptionKey($pack->getPackId(), null);
 		$plugin->getLogger()->debug('Resource pack unregistered');
 
 		unlink(Path::join($plugin->getDataFolder(), $plugin->getName() . '.mcpack'));
