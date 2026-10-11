@@ -23,6 +23,9 @@ class ResourcePackManager {
 	private static ?ResourcePack $pack = null;
 
 	public static function registerResourcePack(PluginBase $plugin, string $encryptKey = "") : void {
+		if (self::$pack !== null) {
+			throw new libBedrockUnexpectedValueException('A resource pack is already registered');
+		}
 		if ($encryptKey !== "" && strlen($encryptKey) !== 32) {
 			throw new libBedrockUnexpectedValueException('Resource pack encryption key must be exactly 32 bytes');
 		}
@@ -91,6 +94,7 @@ class ResourcePackManager {
 		$plugin->getLogger()->debug('Resource pack unregistered');
 
 		unlink(Path::join($plugin->getDataFolder(), $plugin->getName() . '.mcpack'));
+		self::$pack = null;
 		$plugin->getLogger()->debug('Resource pack file deleted');
 	}
 }
