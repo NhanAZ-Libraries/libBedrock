@@ -31,7 +31,7 @@ class ResourcePackManager {
 		}
 		$plugin->getLogger()->debug('Compiling resource pack');
 		$zip = new \ZipArchive();
-		if ($zip->open(Path::join($plugin->getDataFolder(), $plugin->getName() . '.mcpack'), \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+		if ($zip->open(Path::join($plugin->getDataFolder(), $plugin->getName() . '.mcpack'), \ZipArchive::CREATE | \ZipArchive::EXCL) !== true) {
 			throw new libBedrockUnexpectedValueException('Could not create resource pack archive');
 		}
 		$prefix = $plugin->getName() . ' Pack/';
