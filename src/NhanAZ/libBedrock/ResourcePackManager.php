@@ -16,6 +16,7 @@ use function is_null;
 use function is_string;
 use function preg_replace;
 use function str_contains;
+use function strlen;
 use function unlink;
 
 class ResourcePackManager {
@@ -23,6 +24,9 @@ class ResourcePackManager {
 	private static ?ResourcePack $pack = null;
 
 	public static function registerResourcePack(PluginBase $plugin, string $encryptKey = "") : void {
+		if ($encryptKey !== "" && strlen($encryptKey) !== 32) {
+			throw new libBedrockUnexpectedValueException('Resource pack encryption key must be exactly 32 bytes');
+		}
 		$plugin->getLogger()->debug('Compiling resource pack');
 		$zip = new \ZipArchive();
 		$zip->open(Path::join($plugin->getDataFolder(), $plugin->getName() . '.mcpack'), \ZipArchive::CREATE | \ZipArchive::OVERWRITE);

@@ -12,6 +12,8 @@ The [`virion.yml`](virion.yml) manifest declares plugin API `5.0.0`. The current
 
 `Counter` depends on VAPM, while other helpers use Axolotl-PM and Hydrogen APIs. Check the dependency and license terms of every component before distributing a bundle. Static analysis of source code does not verify that those dependencies can be packaged or loaded together.
 
+`ResourcePackManager::registerResourcePack()` accepts an empty encryption key or a key of exactly 32 bytes. An invalid key is rejected before the helper creates a pack or changes the server resource stack. An isolated probe on the tested Axolotl-PM runtime verified registration and removal of a generated pack through the public resource pack manager API. This probe used only the helper and its exception class, not a PHAR containing the full library dependency graph.
+
 ## Using the library
 
 Existing integrations should pin a source revision or release and test it with the exact Axolotl-PM runtime and dependency graph they deploy. The repository does not currently provide a verified build of the latest source for general installation.
