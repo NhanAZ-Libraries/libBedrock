@@ -21,6 +21,7 @@ use function unlink;
 class ResourcePackManager {
 
 	private static ?ResourcePack $pack = null;
+	private static ?PluginBase $owner = null;
 
 	public static function registerResourcePack(PluginBase $plugin, string $encryptKey = "") : void {
 		if (self::$pack !== null) {
@@ -62,6 +63,7 @@ class ResourcePackManager {
 		$plugin->getLogger()->debug('Registering resource pack');
 		$plugin->getLogger()->debug('Resource pack compiled');
 		self::$pack = $pack = new ZippedResourcePack(Path::join($plugin->getDataFolder(), $plugin->getName() . '.mcpack'));
+		self::$owner = $plugin;
 		$packId = $pack->getPackId();
 		$manager = $plugin->getServer()->getResourcePackManager();
 
@@ -80,7 +82,7 @@ class ResourcePackManager {
 	public static function unRegisterResourcePack(PluginBase $plugin) : void {
 		$manager = $plugin->getServer()->getResourcePackManager();
 		$pack = self::$pack;
-		if (is_null($pack)) {
+		if (is_null($pack) || self::$owner !== $plugin) {
 			throw new libBedrockUnexpectedValueException();
 		}
 		$currentResourcePacks = $manager->getResourceStack();
@@ -95,6 +97,7 @@ class ResourcePackManager {
 
 		unlink(Path::join($plugin->getDataFolder(), $plugin->getName() . '.mcpack'));
 		self::$pack = null;
+		self::$owner = null;
 		$plugin->getLogger()->debug('Resource pack file deleted');
 	}
 }
