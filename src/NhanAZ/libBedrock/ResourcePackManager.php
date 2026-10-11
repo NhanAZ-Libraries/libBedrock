@@ -8,15 +8,14 @@ use NhanAZ\libBedrock\exception\libBedrockUnexpectedValueException;
 use pocketmine\plugin\PluginBase;
 use pocketmine\resourcepacks\ResourcePack;
 use pocketmine\resourcepacks\ZippedResourcePack;
-use pocketmine\utils\Filesystem;
 use Symfony\Component\Filesystem\Path;
 use function array_search;
 use function array_splice;
+use function file_get_contents;
 use function is_null;
-use function is_string;
-use function preg_replace;
-use function str_contains;
+use function str_starts_with;
 use function strlen;
+use function substr;
 use function unlink;
 
 class ResourcePackManager {
@@ -29,22 +28,32 @@ class ResourcePackManager {
 		}
 		$plugin->getLogger()->debug('Compiling resource pack');
 		$zip = new \ZipArchive();
-		$zip->open(Path::join($plugin->getDataFolder(), $plugin->getName() . '.mcpack'), \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
-
-		foreach ($plugin->getResources() as $resource) {
-			if ($resource->isFile() && str_contains($resource->getPathname(), $plugin->getName() . ' Pack')) {
-				$path = preg_replace("/.*[\/\\\\]{$plugin->getName()}\hPack[\/\\\\].*/U", '', $resource->getPathname());
-				if (!is_string($path)) {
-					throw new libBedrockUnexpectedValueException();
-				}
-				$relativePath = Path::normalize($path);
-				$plugin->saveResource(Path::join($plugin->getName() . ' Pack', $relativePath), false);
-				$zip->addFile(Path::join($plugin->getDataFolder(), $plugin->getName() . ' Pack', $relativePath), $relativePath);
-			}
+		if ($zip->open(Path::join($plugin->getDataFolder(), $plugin->getName() . '.mcpack'), \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+			throw new libBedrockUnexpectedValueException('Could not create resource pack archive');
 		}
-
-		$zip->close();
-		Filesystem::recursiveUnlink(Path::join($plugin->getDataFolder(), $plugin->getName() . ' Pack'));
+		$prefix = $plugin->getName() . ' Pack/';
+		$entries = 0;
+		try {
+			foreach ($plugin->getResources() as $resourcePath => $resource) {
+				if (!$resource->isFile() || !str_starts_with($resourcePath, $prefix)) {
+					continue;
+				}
+				$relativePath = substr($resourcePath, strlen($prefix));
+				if ($relativePath === '' || Path::normalize($relativePath) !== $relativePath) {
+					throw new libBedrockUnexpectedValueException('Invalid resource pack path');
+				}
+				$content = file_get_contents($resource->getPathname());
+				if ($content === false || !$zip->addFromString($relativePath, $content)) {
+					throw new libBedrockUnexpectedValueException('Could not add resource pack entry');
+				}
+				++$entries;
+			}
+		} finally {
+			$closed = $zip->close();
+		}
+		if (!$closed || $entries === 0) {
+			throw new libBedrockUnexpectedValueException('Resource pack archive is empty or could not be closed');
+		}
 		$plugin->getLogger()->debug('Resource pack compiled');
 
 		$plugin->getLogger()->debug('Registering resource pack');
