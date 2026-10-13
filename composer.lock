@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1d44e868bf29d2d466f225f60f423a10",
+    "content-hash": "30df253e497e72f826db49fb859d3498",
     "packages": [
         {
             "name": "adhocore/json-comment",
@@ -1201,16 +1201,16 @@
         },
         {
             "name": "vennv/vapm-pmmp",
-            "version": "1.8.9",
+            "version": "2.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/VennDev/LibVapmPMMP.git",
-                "reference": "3d97f73ecf922fc3f984159f3c5f099d231c3097"
+                "reference": "46926aeb4e82bbe202ebcf08305f6f06a404e378"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/VennDev/LibVapmPMMP/zipball/3d97f73ecf922fc3f984159f3c5f099d231c3097",
-                "reference": "3d97f73ecf922fc3f984159f3c5f099d231c3097",
+                "url": "https://api.github.com/repos/VennDev/LibVapmPMMP/zipball/46926aeb4e82bbe202ebcf08305f6f06a404e378",
+                "reference": "46926aeb4e82bbe202ebcf08305f6f06a404e378",
                 "shasum": ""
             },
             "require": {
@@ -1230,6 +1230,10 @@
                 }
             },
             "autoload": {
+                "files": [
+                    "src/vennv/vapm/io/functions.php",
+                    "src/vennv/vapm/ct/functions.php"
+                ],
                 "psr-4": {
                     "vennv\\vapm\\": "src/vennv/vapm/"
                 }
@@ -1254,9 +1258,9 @@
             ],
             "support": {
                 "issues": "https://github.com/VennDev/LibVapmPMMP/issues",
-                "source": "https://github.com/VennDev/LibVapmPMMP/tree/1.8.9"
+                "source": "https://github.com/VennDev/LibVapmPMMP/tree/2.5.6"
             },
-            "time": "2024-08-01T10:51:50+00:00"
+            "time": "2024-09-02T05:40:25+00:00"
         }
     ],
     "packages-dev": [
