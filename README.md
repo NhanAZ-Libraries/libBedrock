@@ -14,6 +14,8 @@ The [`virion.yml`](virion.yml) manifest declares plugin API `5.0.0`. The current
 
 `ResourcePackManager::registerResourcePack()` accepts an empty encryption key or a key of exactly 32 bytes. An invalid key is rejected before the helper creates a pack or changes the server resource stack. It reads packaged resources directly when creating the archive and leaves an existing `<plugin> Pack` directory in plugin data untouched. If `<plugin>.mcpack` already exists in plugin data, registration fails without overwriting it. A second registration is rejected until the pack is unregistered. Only the plugin that registered a pack may unregister it; a call from another plugin is rejected before changing the resource stack or its own files. An isolated probe on the tested Axolotl-PM runtime verified registration, preservation of existing data and removal of a generated pack through the public resource pack manager API. This probe used only the helper and its exception class, not a PHAR containing the full library dependency graph.
 
+`ConfigChecker::checkConfigVersion()` leaves configurations at the requested version or a newer version untouched. For an older version, it refuses to replace an existing backup and saves a default configuration only after the original file has been backed up. A source fixture checks these outcomes with disposable files; it does not establish full-library PHAR or runtime compatibility.
+
 ## Using the library
 
 Existing integrations should pin a source revision or release and test it with the exact Axolotl-PM runtime and dependency graph they deploy. The repository does not currently provide a verified build of the latest source for general installation.

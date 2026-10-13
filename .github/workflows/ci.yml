@@ -56,6 +56,9 @@ jobs:
       - name: Install locked Composer dependencies
         run: composer install --prefer-dist
 
+      - name: Verify config version migration preserves existing data
+        run: php tests/config-checker.php
+
       - name: Run PHPStan at maximum level
         run: composer run-script analyse
 
