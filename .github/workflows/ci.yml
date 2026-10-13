@@ -59,6 +59,9 @@ jobs:
       - name: Verify config version migration preserves existing data
         run: php tests/config-checker.php
 
+      - name: Verify JWT skin dimensions use the protocol integer type
+        run: php tests/jwt-client-data.php
+
       - name: Run PHPStan at maximum level
         run: composer run-script analyse
 

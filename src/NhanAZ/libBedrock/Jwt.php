@@ -285,18 +285,18 @@ class Jwt {
 
 	public function getSkinImageHeight() : string {
 		$SkinImageHeight = $this->clientData[1]["SkinImageHeight"];
-		if (!is_string($SkinImageHeight)) {
+		if (!is_int($SkinImageHeight)) {
 			throw new libBedrockUnexpectedValueException();
 		}
-		return $SkinImageHeight;
+		return (string) $SkinImageHeight;
 	}
 
 	public function getSkinImageWidth() : string {
 		$SkinImageWidth = $this->clientData[1]["SkinImageWidth"];
-		if (!is_string($SkinImageWidth)) {
+		if (!is_int($SkinImageWidth)) {
 			throw new libBedrockUnexpectedValueException();
 		}
-		return $SkinImageWidth;
+		return (string) $SkinImageWidth;
 	}
 
 	public function getSkinResourcePatch() : string {
