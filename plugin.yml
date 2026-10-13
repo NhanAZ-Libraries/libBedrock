@@ -2,7 +2,7 @@
 name: libBedrock
 version: 1.1.9
 main: NhanAZ\libBedrock\libBedrock
-api: [5.0.0]
+api: [5.47.0]
 website: https://github.com/NhanAZ
 author: NhanAZ
 description: Common features for PocketMine-MP plugins

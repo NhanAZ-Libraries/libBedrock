@@ -8,7 +8,7 @@ libBedrock is a utility library and virion for Axolotl-PM plugin development. It
 
 ## Compatibility and status
 
-The [`virion.yml`](virion.yml) manifest declares plugin API `5.0.0`. The current Composer dependency graph requires Axolotl-PM `5.47.0` or newer for package resolution. Neither declaration establishes runtime compatibility across that range. The [v1.1.9 release](https://github.com/NhanAZ-Libraries/libBedrock/releases/tag/v1.1.9) is historical. A current combined PHAR and its runtime behavior have not been verified for this library.
+The Composer dependency is constrained to Axolotl-PM `^5.47.0`, and both manifests declare API minimum `5.47.0`. This is the package's declared loadability floor, not evidence that runtime behavior has been verified throughout the allowed range. Check the linked [CI results](https://github.com/NhanAZ-Libraries/libBedrock/actions/workflows/ci.yml) for the exact locked dependencies exercised by each run. The [v1.1.9 release](https://github.com/NhanAZ-Libraries/libBedrock/releases/tag/v1.1.9) is historical. A current combined PHAR and its runtime behavior have not been verified for this library.
 
 `Counter` depends on VAPM, while other helpers use Axolotl-PM and Hydrogen APIs. The locked VAPM package declares `LGPL-2.0-only` in its Composer metadata, but its source notices say GPL version 2 or later and its LICENSE contains GPL version 2. This conflict needs resolution before distributing a combined PHAR. Static analysis of source code does not verify that these dependencies can be packaged or loaded together.
 
