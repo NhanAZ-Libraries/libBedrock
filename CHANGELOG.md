@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.0 - Unreleased
+## 2.0.0 - 2026-10-14
 
 - Remove the VAPM runtime dependency from `Counter`.
 - Change `Counter::getFolderInfo()` to return its statistics synchronously. Callers migrating from 1.x must remove their VAPM `Async` handling.

@@ -8,9 +8,9 @@ libBedrock is a utility library and virion for Axolotl-PM plugin development. It
 
 ## Compatibility and status
 
-The Composer dependency is constrained to Axolotl-PM `^5.47.0`, and both manifests declare API minimum `5.47.0`. This is the package's declared loadability floor, not evidence that runtime behavior has been verified throughout the allowed range. Check the linked [CI results](https://github.com/NhanAZ-Libraries/libBedrock/actions/workflows/ci.yml) for the exact locked dependencies exercised by each run. The [v1.1.9 release](https://github.com/NhanAZ-Libraries/libBedrock/releases/tag/v1.1.9) is historical. Version 2.0.0 is being prepared with a new synchronous `Counter` contract.
+The Composer dependency is constrained to Axolotl-PM `^5.47.0`, and both manifests declare API minimum `5.47.0`. This is the package's declared loadability floor, not evidence that runtime behavior has been verified throughout the allowed range. Check the linked [CI results](https://github.com/NhanAZ-Libraries/libBedrock/actions/workflows/ci.yml) for the exact locked dependencies exercised by each run. Stable release [v2.0.0](https://github.com/NhanAZ-Libraries/libBedrock/releases/tag/v2.0.0) removes VAPM and changes `Counter` to a synchronous API. Version [v1.1.9](https://github.com/NhanAZ-Libraries/libBedrock/releases/tag/v1.1.9) remains available for consumers that need the 1.x API.
 
-Version 2 removes the VAPM dependency. `Counter::getFolderInfo()` now returns its result synchronously; callers migrating from 1.x must stop awaiting an `Async` value. The plugin argument remains in that method for call-site compatibility. `Counter::getFolderInfoFromDirectory()` is the plugin-independent entry point. Both methods scan on the server thread, so use them only for directories small enough not to delay a tick. This is a major API change, and the next stable release is version 2.0.0.
+Version 2 removes the VAPM dependency. `Counter::getFolderInfo()` now returns its result synchronously; callers migrating from 1.x must stop awaiting an `Async` value. The plugin argument remains in that method for call-site compatibility. `Counter::getFolderInfoFromDirectory()` is the plugin-independent entry point. Both methods scan on the server thread, so use them only for directories small enough not to delay a tick. This is a major API change; migrate callers before upgrading from 1.x.
 
 `ResourcePackManager::registerResourcePack()` accepts an empty encryption key or a key of exactly 32 bytes. An invalid key is rejected before the helper creates a pack or changes the server resource stack. It reads packaged resources directly when creating the archive and leaves an existing `<plugin> Pack` directory in plugin data untouched. If `<plugin>.mcpack` already exists in plugin data, registration fails without overwriting it. A second registration is rejected until the pack is unregistered. Only the plugin that registered a pack may unregister it; a call from another plugin is rejected before changing the resource stack or its own files. An isolated probe on the tested Axolotl-PM runtime verified registration, preservation of existing data and removal of a generated pack through the public resource pack manager API. This probe used only the helper and its exception class, not a PHAR containing the full library dependency graph.
 
@@ -18,7 +18,7 @@ Version 2 removes the VAPM dependency. `Counter::getFolderInfo()` now returns it
 
 ## Using the library
 
-Existing integrations should pin a source revision or release and test it with the exact Axolotl-PM runtime and dependency graph they deploy. The repository does not currently provide a verified build of the latest source for general installation.
+Integrations should pin a source revision or release and test it with the exact Axolotl-PM runtime and dependency graph they deploy. The `v2.0.0` release includes the PHAR built from the tagged commit and checked by the linked CI workflow. The PHAR also loaded and enabled on Axolotl-PM 5.49.1 in an isolated runtime; that single patch does not establish compatibility across the full Composer range.
 
 For example, `BedrockMath::center()` returns a new vector offset by half a block on each axis:
 
@@ -36,7 +36,7 @@ See the [source classes](src/NhanAZ/libBedrock) for the public methods and their
 
 [DevTools](https://github.com/NhanAZ/DevTools) can build and validate plugin PHARs when their dependencies meet its packaging contract. The [`devtools.yml`](devtools.yml) file selects the locked Composer graph instead of importing the older `.poggit.yml` library declarations into the same build. The version 2 build resolves its locked Composer virions into a separate prepared directory and validates their licenses and provenance in the PHAR. This packaging result does not replace the exact source analysis or the runtime evidence required by a consumer plugin.
 
-The [CI workflow](.github/workflows/ci.yml) runs source checks, including the `Counter` directory fixture and PHPStan at maximum level. Review the linked workflow run for its exact source revision and tests before reusing a result. Package and runtime checks remain necessary for a consumer plugin.
+The [CI workflow](.github/workflows/ci.yml) runs source checks, including the `Counter` directory fixture and PHPStan at maximum level, then builds the PHAR and validates its contents, dependency notices, and checksum. Review the linked workflow run for its exact source revision and tests before reusing a result. The isolated runtime check verifies plugin startup; consumer behavior still needs testing in the consuming plugin.
 
 ## License and credits
 
