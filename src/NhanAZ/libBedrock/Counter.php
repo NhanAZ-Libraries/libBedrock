@@ -8,6 +8,7 @@ use pocketmine\plugin\PluginBase;
 use SplFileInfo;
 use function count;
 use function file;
+use function file_get_contents;
 use function is_array;
 use function is_dir;
 use function str_word_count;
