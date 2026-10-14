@@ -1,2 +1,5 @@
 # Composer
 vendor/*
+/.devtools-dependencies/
+/build/
+/build-v2/

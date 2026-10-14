@@ -9,6 +9,58 @@ permissions:
   contents: read
 
 jobs:
+  build:
+    name: Build and verify the library PHAR
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out libBedrock
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Check out Axolotl-PM PHP setup helper
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: axolotl-pm/setup-php-action
+          ref: b8c3f9add4f2ad4a5e2624a1112aba899ee8db0e
+          path: .devtools-dependencies/setup-php-action
+          persist-credentials: false
+
+      - name: Set up PHP for Axolotl-PM 5
+        shell: bash
+        env:
+          INPUT_PHP-VERSION: "8.2"
+          INPUT_PM-VERSION-MAJOR: "5"
+          INPUT_INSTALL-PATH: ./.php-bin
+        run: node "$GITHUB_WORKSPACE/.devtools-dependencies/setup-php-action/dist/index.js"
+
+      - name: Prepare locked dependencies and build with DevTools
+        id: build
+        uses: NhanAZ/DevTools@8d13a75aaf4f330fdbd93737d58be9cacc41e262 # v1.0.15
+        with:
+          project: .
+          virions: .devtools-dependencies/virions
+          output: build
+          prepare-dependencies: true
+
+      - name: Verify library PHAR, dependency licenses and checksum
+        shell: bash
+        env:
+          PHAR_PATH: ${{ steps.build.outputs.phar }}
+          PHAR_SHA256: ${{ steps.build.outputs.sha256 }}
+        run: |
+          set -euo pipefail
+          test "$(sha256sum "$PHAR_PATH" | cut -d ' ' -f 1)" = "$PHAR_SHA256"
+          php -r '$p = new Phar(getenv("PHAR_PATH")); foreach (["plugin.yml", "LICENSE", "src/NhanAZ/libBedrock/Counter.php", "META-INF/virions/sof3.await-generator/LICENSE", "META-INF/virions/thebigcrafter.hydrogen/LICENSE"] as $f) { if (!$p->offsetExists($f)) { throw new RuntimeException("Missing required PHAR entry: " . $f); } } $counter = $p["src/NhanAZ/libBedrock/Counter.php"]->getContent(); if (str_contains($counter, "use vennv\\vapm\\")) { throw new RuntimeException("VAPM is still referenced by Counter."); }'
+
+      - name: Upload verified library PHAR
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: libBedrock-${{ github.sha }}
+          path: ${{ steps.build.outputs.phar }}
+          if-no-files-found: error
+          retention-days: 14
+
   phpstan:
     name: PHPStan analysis
     runs-on: ${{ matrix.image }}
@@ -61,6 +113,9 @@ jobs:
 
       - name: Verify JWT skin dimensions use the protocol integer type
         run: php tests/jwt-client-data.php
+
+      - name: Verify synchronous Counter directory statistics
+        run: php tests/counter.php
 
       - name: Run PHPStan at maximum level
         run: composer run-script analyse
