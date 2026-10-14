@@ -1,6 +1,6 @@
 # libBedrock
 
-![libBedrock icon](assets/libBedrock_Icon_GIF.gif)
+<img src="assets/libBedrock_Icon_GIF.gif" alt="libBedrock icon" width="128">
 
 libBedrock is a utility library and virion for Axolotl-PM plugin development. Its source contains item and block parsers, vector and sound helpers, resource pack management, and a file counter.
 
