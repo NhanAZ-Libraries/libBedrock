@@ -59,8 +59,6 @@ jobs:
           name: libBedrock-${{ github.sha }}
           path: ${{ steps.build.outputs.phar }}
           if-no-files-found: error
-          retention-days: 14
-
   phpstan:
     name: PHPStan analysis
     runs-on: ${{ matrix.image }}
@@ -143,7 +141,7 @@ jobs:
       - name: Set up PHP environment
         shell: bash
         env:
-          INPUT_PHP-VERSION: "8.2"
+          INPUT_PHP-VERSION: 8.4
           INPUT_PM-VERSION-MAJOR: "5"
           INPUT_INSTALL-PATH: ./.php-bin
         run: node "$GITHUB_WORKSPACE/.devtools-dependencies/setup-php-action/dist/index.js"
