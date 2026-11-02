@@ -29,14 +29,14 @@ jobs:
       - name: Set up PHP for Axolotl-PM 5
         shell: bash
         env:
-          INPUT_PHP-VERSION: "8.2"
+          INPUT_PHP-VERSION: "8.4"
           INPUT_PM-VERSION-MAJOR: "5"
           INPUT_INSTALL-PATH: ./.php-bin
         run: node "$GITHUB_WORKSPACE/.devtools-dependencies/setup-php-action/dist/index.js"
 
       - name: Prepare locked dependencies and build with DevTools
         id: build
-        uses: NhanAZ/DevTools@8d13a75aaf4f330fdbd93737d58be9cacc41e262 # v1.0.15
+        uses: NhanAZ/DevTools@v2 # v2
         with:
           project: .
           virions: .devtools-dependencies/virions
