@@ -7,9 +7,6 @@ Utility library and virion for Axolotl-PM plugins with parsing, sound, and resou
 [![License](https://img.shields.io/github/license/NhanAZ-Libraries/libBedrock)](https://github.com/NhanAZ-Libraries/libBedrock/blob/master/LICENSE)
 [![Discord](https://img.shields.io/discord/986553214889517088?label=Discord&logo=discord&logoColor=white&color=5865F2)](https://discord.gg/j2X83ujT6c)
 
-## Overview
-
-This library targets the PocketMine-MP and Axolotl-PM API 5 ecosystem and is maintained under [NhanAZ-Libraries](https://github.com/NhanAZ-Libraries).
 
 ## Compatibility and status
 
