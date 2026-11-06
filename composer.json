@@ -21,7 +21,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/NhanAZ-Libraries/await-generator",
+            "url": "https://github.com/AxolotlBucketLabs/await-generator",
             "no-api": true
         }
     ],

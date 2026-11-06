@@ -1079,12 +1079,12 @@
             "version": "dev-devtools-shading-compat",
             "source": {
                 "type": "git",
-                "url": "https://github.com/NhanAZ-Libraries/await-generator",
+                "url": "https://github.com/AxolotlBucketLabs/await-generator",
                 "reference": "51b0294595af5053ed46e3858a80b6a956c75128"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/NhanAZ-Libraries/await-generator/zipball/51b0294595af5053ed46e3858a80b6a956c75128",
+                "url": "https://api.github.com/repos/AxolotlBucketLabs/await-generator/zipball/51b0294595af5053ed46e3858a80b6a956c75128",
                 "reference": "51b0294595af5053ed46e3858a80b6a956c75128",
                 "shasum": ""
             },
