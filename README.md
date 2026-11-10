@@ -36,7 +36,7 @@ See the [source classes](src/NhanAZ/libBedrock) for the public methods and their
 
 ## Building and verification
 
-[DevTools](https://github.com/AxolotlBucketLabs/DevTools) can build and validate plugin PHARs when their dependencies meet its packaging contract. The [`devtools.yml`](devtools.yml) file selects the locked Composer graph instead of importing the older `.poggit.yml` library declarations into the same build. The version 3 build resolves its locked Composer virions into a separate prepared directory and validates their licenses and provenance in the PHAR. This packaging result does not replace the exact source analysis or the runtime evidence required by a consumer plugin.
+[DevTools](https://github.com/AxolotlBucketLabs/DevTools) can build and validate plugin PHARs when their dependencies meet its packaging contract. The [`devtools.yml`](devtools.yml) file selects the locked Composer graph instead of importing the older `.poggit.yml` library declarations into the same build. The current DevTools build resolves its locked Composer virions into a separate prepared directory and validates their licenses and provenance in the PHAR. This packaging result does not replace the exact source analysis or the runtime evidence required by a consumer plugin.
 
 The [CI workflow](.github/workflows/ci.yml) runs source checks, including the `Counter` directory fixture and PHPStan at maximum level, then builds the PHAR and validates its contents, dependency notices, and checksum. Review the linked workflow run for its exact source revision and tests before reusing a result. The isolated runtime check verifies plugin startup; consumer behavior still needs testing in the consuming plugin.
 

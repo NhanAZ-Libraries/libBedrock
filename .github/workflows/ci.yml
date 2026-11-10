@@ -36,7 +36,7 @@ jobs:
 
       - name: Prepare locked dependencies and build with DevTools
         id: build
-        uses: AxolotlBucketLabs/DevTools@v3
+        uses: AxolotlBucketLabs/DevTools@latest
         with:
           project: .
           virions: .devtools-dependencies/virions
